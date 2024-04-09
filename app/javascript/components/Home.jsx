@@ -17,6 +17,13 @@ export default () => (
         >
           View Games
         </Link>
+        <Link
+          to="/blogs"
+          className="btn btn-lg custom-button"
+          role="button"
+        >
+          View Blogs
+        </Link>
       </div>
     </div>
   </div>
