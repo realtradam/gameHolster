@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       post 'blogs/create', to: 'blog#create'
       get '/show/:id', to: 'blog#show'
       delete '/destroy/:id', to: 'blog#destroy'
+
+      get 'auth/callback', to: 'auth#callback'
+      get 'auth/data', to: 'auth#data'
     end
   end
   root 'homepage#index'
