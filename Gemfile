@@ -72,3 +72,5 @@ end
 gem "json", "~> 2.7"
 
 gem "foreman", "~> 0.87.2"
+
+gem "tailwindcss-rails", "~> 2.4"
