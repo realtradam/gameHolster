@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../components/Home";
 import Blogs from "../components/Blogs";
 import Layout from "../components/Layout";
 
 export default function index()
 {
-	const [userData, setUserData] = useState({ login: "" });
+	const [userData, setUserData] = useState({});
 	const url = "/api/v1/auth/data";
 	useEffect(() => {
 		fetch(url).then((response) => {
@@ -14,7 +14,7 @@ export default function index()
 			return response.json();
 		}
 		throw new Error("Network response was not ok.");
-	}).then((response) => setUserData(response));}, []);
+	}).then((response) => setUserData(response.user_data));}, []);
 		// get user data here
 		// then pass it in as 'props' into the components
 	return (<>

@@ -3,14 +3,14 @@ import { Outlet, Link } from "react-router-dom";
 
 export default function Layout ({userData}) 
 {
-	//console.log(userData);
-	//const [userData, setUserData] = useState({ login: "" });
+	console.log(userData);
+	//const [userData, setUserData] = useState({ name: "" });
 	return (
 	<>
 		<div className="flex flex-row h-screen bg-slate-800 text-slate-100">
 		<nav className="flex flex-row h-full w-64 p-4 gap-4 items-center">
 			<div className="h-full flex flex-col">
-				<div>Logged in as: {userData.login}</div>
+		{ userData.name ? <div> Logged in as: {userData.name} </div> : <a href="https://github.com/login/oauth/authorize?client_id=74468ad0847e527262d9"> Login with Github </a> } 
 				<div className="text-4xl py-12">Adam Malczewski</div>
 				<div className="flex flex-row justify-center w-full block grow">
 				<div className="block grow">	
