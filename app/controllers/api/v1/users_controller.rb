@@ -5,6 +5,10 @@ class Api::V1::UsersController < ApplicationController
     render json: blog
   end
 
+  def get
+
+  end
+
   def create_or_update(user_params)
     # add new user, overwrite if exists
   end

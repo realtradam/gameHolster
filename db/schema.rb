@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_03_001922) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_09_225147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_001922) do
     t.string "image", default: "https://tradam.dev/images/logo.png"
     t.date "live_date"
     t.date "update_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
