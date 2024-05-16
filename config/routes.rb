@@ -2,25 +2,32 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
-      # USERS
-      get 'users/index', to: 'users#index'
-      #get 'users/new'
-      #get 'users/create'
-      #get 'users/delete'
+      # isolated domain, do not allow auth here
+      constraints domain: 'localhost' do
+        # GAMES
+        get 'games/*path/:file', to: 'games#index'
+      end
 
-      # GAMES
-      get 'games/*path/:file', to: 'games#index'
-      #resources :games
+      constraints domain: "127.0.0.1" do
+        # USERS
+        get 'users/index', to: 'users#index'
+        #get 'users/new'
+        #get 'users/create'
+        #get 'users/delete'
 
-      # BLOGS
-      get 'blogs/index', to: 'blog#index'
-      post 'blogs/create', to: 'blog#create'
-      get '/show/:id', to: 'blog#show'
-      delete '/destroy/:id', to: 'blog#destroy'
+        # GAMES
+        #resources :games
 
-      # AUTH
-      get 'auth/callback', to: 'auth#callback'
-      get 'auth/data', to: 'auth#data'
+        # BLOGS
+        get 'blogs/index', to: 'blog#index'
+        post 'blogs/create', to: 'blog#create'
+        get '/show/:id', to: 'blog#show'
+        delete '/destroy/:id', to: 'blog#destroy'
+
+        # AUTH
+        get 'auth/callback', to: 'auth#callback'
+        get 'auth/data', to: 'auth#data'
+      end
     end
   end
   root 'homepage#index'
