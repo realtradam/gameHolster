@@ -14,9 +14,9 @@ export default function Layout ({userData})
 					{ userData.name ? <div className="flex items-end gap-2 pb-2"> <div className="text-xs"> Logged in as: </div> <div>{userData.name}</div> </div> : <a href="https://github.com/login/oauth/authorize?client_id=74468ad0847e527262d9" className="pb-2"> Login with Github </a> }
 					<div className="text-3xl py-10 text-center font-title">Adam Malczewski</div>
 					<div className="flex flex-col items-center gap-1 w-full">
-							<Button link={ <Link to="/" className="text-stone-50 bg-transparent" role="button">About Me</Link> }/>
-							<Button link={ <Link to="/blogs" className="text-stone-50 bg-transparent" role="button">Blog</Link> }/>
-							<Button link={ <Link to="/games" className="text-stone-50 bg-transparent" role="button">Games</Link> }/>
+							<Button link={ <Link to="/" className="absolute flex top-0 left-0 w-36 h-16 text-stone-50 bg-transparent justify-center items-center" role="button"><div className="h-min">About Me</div></Link> }/>
+							<Button link={ <Link to="/blogs" className="absolute flex top-0 left-0 w-36 h-16 text-stone-50 bg-transparent justify-center items-center" role="button"><div className="h-min">Blog</div></Link> }/>
+							<Button link={ <Link to="/games" className="absolute flex top-0 left-0 w-36 h-16 text-stone-50 bg-transparent justify-center items-center" role="button"><div className="h-min">Games</div></Link> }/>
 							<Button link={ <div className="text-stone-50 bg-transparent w-36 h-16 flex justify-center items-center">
 								<a id="contact" href="mailto:adam@malcz.com" className="w-36 h-16 relative text-center whitespace-nowrap flex justify-center items-center">
 								<div className="contact w-36 h-16 flex items-center justify-center">
@@ -28,9 +28,9 @@ export default function Layout ({userData})
 								</a>	
 								</div> }/>
 							<div className="socials flex flex-row place-content-center gap-1">
-								<Button link={<a id="contact" href="https://github.com/realtradam" className=" w-10 h-10 text-center whitespace-nowrap flex justify-center items-center"><i className="fa-brands fa-github"></i></a>} width={10} height={16} spinner={3}/>
-								<Button link={<a id="contact" href="https://www.linkedin.com/in/adammalczewski/" className=" w-10 h-10 text-center whitespace-nowrap flex justify-center items-center"><i className="fa-brands fa-linkedin"></i></a>} width={10} height={16} spinner={3}/>
-								<Button link={<a id="contact" href="https://tradam.itch.io" className=" w-10 h-10 text-center whitespace-nowrap flex justify-center items-center"><i className="fa-brands fa-itch-io"></i></a>} width={10} height={16} spinner={3}/>
+								<Button link={<a id="contact" href="https://github.com/realtradam" className="absolute flex top-0 left-0 w-10 h-16 text-stone-50 bg-transparent justify-center items-center"><i className="fa-brands fa-github"></i></a>} width={10} height={16} spinner={3}/>
+								<Button link={<a id="contact" href="https://www.linkedin.com/in/adammalczewski/" className="absolute flex top-0 left-0 w-10 h-16 text-stone-50 bg-transparent justify-center items-center"><i className="fa-brands fa-linkedin"></i></a>} width={10} height={16} spinner={3}/>
+								<Button link={<a id="contact" href="https://tradam.itch.io" className="absolute flex top-0 left-0 w-10 h-16 text-stone-50 bg-transparent justify-center items-center"><i className="fa-brands fa-itch-io"></i></a>} width={10} height={16} spinner={3}/>
 							</div>
 					</div>
 		</div>

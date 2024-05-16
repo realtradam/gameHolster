@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../components/Home";
 import Blogs from "../components/Blogs";
+import Games from "../components/Games";
 import Layout from "../components/Layout";
 
 export default function index()
@@ -24,6 +25,7 @@ export default function index()
 				<Route path="/" element = {<Layout userData={userData}/>}>
 					<Route index element={<Home />} />
 					<Route path="/blogs" element={<Blogs />} />
+					<Route path="/games" element={<Games />} />
 				</Route>
 			</Routes>
 		</Router>

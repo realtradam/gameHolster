@@ -33,27 +33,8 @@ export default function Home () {
 Ea optio vitae culpa voluptatem consectetur. Ab quisquam sed ipsum. Perspiciatis minus odit quas qui consequuntur dicta reiciendis a. Nihil minima sed aliquam.
 		</p>
 						<hr className="my-4" />
-				<form onSubmit={handleSubmit} action="/upload" method="post" className="flex flex-col gap-4">
-				<div>
-				<label>Title</label>
-				<input type="text" name="title" />
 				</div>
-				<div>
-				<label>File</label>
-				<input type="file" name="game_file" />
 				</div>
-				<button type="submit" className="w-32 bg-stone-900 text-stone-50 rounded">submit</button>
-				</form>
-				</div>
-		</div>
-			</div>
-			<div className="flex flex-row flex-wrap gap-20 justify-around">
-				<GameCard />
-				<GameCard />
-				<GameCard />
-				<GameCard />
-				<GameCard />
-				<GameCard />
 			</div>
 		</div>
 		</div>

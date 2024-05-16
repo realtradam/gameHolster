@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :games
 
       # USERS
       get 'users/index', to: 'users#index'
@@ -10,7 +9,8 @@ Rails.application.routes.draw do
       #get 'users/delete'
 
       # GAMES
-
+      get 'games/*path/:file', to: 'games#index'
+      #resources :games
 
       # BLOGS
       get 'blogs/index', to: 'blog#index'
