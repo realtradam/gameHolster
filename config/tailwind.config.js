@@ -16,6 +16,9 @@ module.exports = {
 			fontFamily: {
 				sans: ['Inter var', ...defaultTheme.fontFamily.sans],
 			},
+			padding: {
+				'5%': '5%'
+			},
 		},
 	},
 	plugins: [
@@ -23,5 +26,12 @@ module.exports = {
 		require('@tailwindcss/aspect-ratio'),
 		require('@tailwindcss/typography'),
 		require('@tailwindcss/container-queries'),
+	],
+	safelist: [
+
+		{
+			pattern: /(h|w)-.+/,
+			variants: ['before']
+		},
 	]
 }
