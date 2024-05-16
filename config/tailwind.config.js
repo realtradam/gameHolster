@@ -28,10 +28,7 @@ module.exports = {
 		require('@tailwindcss/container-queries'),
 	],
 	safelist: [
-
-		{
-			pattern: /(h|w)-.+/,
-			variants: ['before']
-		},
+		'before:w-3',
+		'before:w-4'
 	]
 }
