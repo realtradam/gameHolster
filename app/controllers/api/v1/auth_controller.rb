@@ -1,9 +1,8 @@
 require 'net/http'
+require 'bcrypt'
+
 class Api::V1::AuthController < ApplicationController
   class << self
-    def user_table
-      @user_table ||= {}
-    end
   end
 
   def data
@@ -11,9 +10,6 @@ class Api::V1::AuthController < ApplicationController
       puts cookies[:session]
       #render json: Api::V1::AuthController.user_table[cookies[:session]]
       result = User.find_by(access_token_digest: cookies[:session])
-      result[:user_data] = result[:user_data]
-      puts "A PREFIX SO WE CAN SEE IT"
-      pp result
       render json: result
     else
       puts "Not logged in"
@@ -32,28 +28,23 @@ class Api::V1::AuthController < ApplicationController
     #pp user_data
     id = user_data['id'].to_s
     #puts "id: #{id}, at: #{access_token}"
-
-    hashed_token = hash_token("#{access_token}")
-    Api::V1::AuthController.user_table[hashed_token] = user_data
-    #puts "Hashed Token: #{hashed_token}"
-    cookies[:session] = hashed_token
-    user_params = {
-      access_token_digest: hashed_token,
-      salt: params[:code].to_s,
-      user_data: user_data
-    }
-    puts "USER DATA HERE NERD"
-    puts user_data.class
+    access_token_digest = BCrypt::Password.create(access_token)
+    cookies[:session] = access_token_digest
+    #user_params = {
+    #  # access_token_digest: hashed_token,
+    #  user_data: user_data
+    #}
+    #puts "USER DATA HERE NERD"
+    #puts user_data.class
     user = User.find_or_create_by(identifier: id)
-    user.update(user_params)
+    user.user_data = user_data
+    user.access_token_digest = access_token_digest
+    user.user_name = user_data["login"]
+    user.save
     redirect_to '/'
   end
 
   private
-
-  def hash_token(token)
-    OpenSSL::HMAC.hexdigest(ENV["ENC_ALGO"], ENV["ENC_KEY"], token)
-  end
 
   def get_github_user_data(access_token)
     uri = URI("https://api.github.com/user")

@@ -3,12 +3,13 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       # isolated domain, do not allow auth here
-      constraints domain: 'localhost' do
+      constraints host: 'localhost' do
         # GAMES
-        get 'games/*path/:file', to: 'games#index'
+        get 'game/:user/:game/*path/:file', to: 'games#index'
+        get 'game/:user/:game/:file', to: 'games#index'
       end
 
-      constraints domain: "127.0.0.1" do
+      constraints host: "127.0.0.1" do
         # USERS
         get 'users/index', to: 'users#index'
         #get 'users/new'
@@ -16,7 +17,8 @@ Rails.application.routes.draw do
         #get 'users/delete'
 
         # GAMES
-        #resources :games
+        post 'games', to: 'games#create'
+        resources :games
 
         # BLOGS
         get 'blogs/index', to: 'blog#index'
@@ -28,6 +30,7 @@ Rails.application.routes.draw do
         get 'auth/callback', to: 'auth#callback'
         get 'auth/data', to: 'auth#data'
       end
+
     end
   end
   root 'homepage#index'
