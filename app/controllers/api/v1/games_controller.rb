@@ -33,12 +33,33 @@ class Api::V1::GamesController < ApplicationController
       return
     end
 
-    render html: game.game_file.download.html_safe #Game.first.game_file.download.html_safe
+    filename = params[:file]
+    if !params[:format].nil?
+      filename = "#{filename}.#{params[:format]}"
+    end
+
+    result = game.game_files.blobs.find_by(filename: filename)
+
+    if(result.nil?)
+      game = Game.all.order(created_at: :desc)
+      render json: game
+      return
+    end
+
+    if params[:format] == "html"
+      render html: result.download.html_safe
+    elsif params[:format] == "js"
+      render js: result.download.html_safe
+    else
+      render plain: result.download
+    end
+
+    #render html: game.game_files.first.download.html_safe #Game.first.game_file.download.html_safe
   end
 
   private
 
   def games_params
-    params.require(:game).permit(:title, :game_file, :titleSlug)
+    params.require(:game).permit(:title, :titleSlug, game_files: [])
   end
 end

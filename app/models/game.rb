@@ -4,5 +4,5 @@ class Game < ApplicationRecord
   #  published: 1
   #}
   #belongs_to :user
-  has_one_attached :game_file
+  has_many_attached :game_files
 end

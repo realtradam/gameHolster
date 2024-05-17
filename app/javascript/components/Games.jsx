@@ -19,10 +19,13 @@ export default function Games () {
 	));
 	var handleSubmit = (e) => {
 		e.preventDefault() //stops submit from happening
-
+		const form = e.target;
 		const formData = new FormData()
-		formData.append('game[title]', e.target.title.value)
-		formData.append('game[game_file]', e.target.game_file.files[0], e.target.game_file.value)
+		formData.append('game[title]', form.title.value)
+		for(let i =0; i < form.game_files.files.length; i++)
+		{
+		formData.append('game[game_files][]', form.game_files.files[i], form.game_files.files[i].value);
+		}
 
 		for (var pair of formData.entries()) {
 			console.log(pair[0] + ', ' + pair[1])
@@ -47,8 +50,8 @@ export default function Games () {
 				<input type="text" name="title" />
 				</div>
 				<div>
-				<label>File</label>
-				<input type="file" name="game_file" />
+				<label>Files</label>
+				<input type="file" multiple="multiple" name="game_files" />
 				</div>
 				<button type="submit" className="w-32 bg-stone-900 text-stone-50 rounded">submit</button>
 				</form>
