@@ -28,7 +28,7 @@ export default function Home () {
 			<div className="">
 				<div className="jumbotron jumbotron-fluid bg-transparent">
 					<div className="container secondary-color">
-						<h1 className="text-2xl">Debug!</h1>
+						<h1 className="text-2xl">Debug! Again</h1>
 						<p className="">
 Ea optio vitae culpa voluptatem consectetur. Ab quisquam sed ipsum. Perspiciatis minus odit quas qui consequuntur dicta reiciendis a. Nihil minima sed aliquam.
 		</p>

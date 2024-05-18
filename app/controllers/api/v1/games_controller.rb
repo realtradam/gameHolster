@@ -1,15 +1,20 @@
+require 'irb'
+
 class Api::V1::GamesController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :allow_iframe, only: [:play]
   def create
-    result = User.find_by(access_token_digest: cookies[:session])
-    if(!result)
+    user = User.find_by(access_token_digest: cookies[:session])
+    if(!user)
       head :unauthorized
     else
-      @game = Game.new(games_params)
-      @game.titleSlug = games_params[:title].parameterize
-      @game.user_id = result.id
+      pp params
+      @game = Game.new(game_params)
+      @game.titleSlug = game_params[:title].parameterize
+      @game.user_id = user.id
+      user.games << @game
       if @game.save
-        pp @game
+
         render json: @game, status: :created
       else
         render json: @game.errors, status: :unprocessable_entity
@@ -17,8 +22,31 @@ class Api::V1::GamesController < ApplicationController
     end
   end
 
-  # :user/:game/*path/:file
+
+  # list of all games
   def index
+    game = Game.all.order(created_at: :desc)
+    render json: game
+  end
+
+  # single game or list of user's games
+  #get 'games/:user/:game', to: 'games#show'
+  #get 'games/:user', to: 'games#show'
+  def show
+    user = User.find_by! user_name: params[:user]
+    if params[:game].nil?
+      # get list of user games
+      games = Game.where(user_id: user.id).order(created_at: :desc)
+      render json: games
+    else
+      game = Game.find_by! user_id: user.id, titleSlug: params[:game]
+      render json: game
+      # get game
+    end
+  end
+
+  # :user/:game/*path/:file
+  def play
     user = User.find_by user_name: params[:user]
     if(user.nil?)
       game = Game.all.order(created_at: :desc)
@@ -57,9 +85,30 @@ class Api::V1::GamesController < ApplicationController
     #render html: game.game_files.first.download.html_safe #Game.first.game_file.download.html_safe
   end
 
+  #get 'imggames/:user/:game/:file', to: 'games#show_img'
+  def show_img
+    user = User.find_by! user_name: params[:user]
+    game = Game.find_by! user_id: user.id, titleSlug: params[:game]
+
+    result = nil;
+    if params[:type] == "char"
+      result = game.char_img.download
+    elsif params[:type] == "title"
+      result = game.title_img.download
+    elsif params[:type] == "card"
+      result = game.card_img.download
+    end
+
+    send_data result, type: 'image/png', disposition: 'inline'
+  end
+
   private
 
-  def games_params
-    params.require(:game).permit(:title, :titleSlug, game_files: [])
+  def game_params 
+    params.require(:game).permit(:title, :card_img, :char_img, :title_img, game_files: [])
+  end
+
+  def allow_iframe
+    response.headers.delete('X-Frame-Options')
   end
 end

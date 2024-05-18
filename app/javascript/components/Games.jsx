@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 //import { Link } from "react-router-dom";
 import GameCard from "./GameCard";
+import Button from "./Button";
 
 //export default () => (
 export default function Games () {
 	const [games, setGames] = useState([]);
 	useEffect(() => {
-		const url = "/api/v1/games/index";
+		const url = "/api/v1/games";
 		fetch(url).then((response) => {
 			if (response.ok) {
 				return response.json();
@@ -14,8 +15,8 @@ export default function Games () {
 			throw new Error("Network response was not ok.");
 		}).then((response) => setGames(response)).catch(() => navigate("/"));
 	}, []);
-	const allGames = games.map((games, index) => (
-		<div>{ blog }</div>
+	const allGames = games.map((game) => (
+		<GameCard game={game} key={game.id}/>
 	));
 	var handleSubmit = (e) => {
 		e.preventDefault() //stops submit from happening
@@ -26,6 +27,9 @@ export default function Games () {
 		{
 		formData.append('game[game_files][]', form.game_files.files[i], form.game_files.files[i].value);
 		}
+		formData.append('game[card_img]', form.card_img.files[0], form.card_img.value);
+		formData.append('game[char_img]', form.char_img.files[0], form.char_img.value);
+		formData.append('game[title_img]', form.title_img.files[0], form.title_img.value);
 
 		for (var pair of formData.entries()) {
 			console.log(pair[0] + ', ' + pair[1])
@@ -53,7 +57,22 @@ export default function Games () {
 				<label>Files</label>
 				<input type="file" multiple="multiple" name="game_files" />
 				</div>
-				<button type="submit" className="w-32 bg-stone-900 text-stone-50 rounded">submit</button>
+				<div>
+				<label>Card Image</label>
+				<input type="file" name="card_img" />
+				</div>
+				<div>
+				<label>Character Image</label>
+				<input type="file" name="char_img" />
+				</div>
+				<div>
+				<label>Title Image</label>
+				<input type="file" name="title_img" />
+				</div>
+				<div style={{ boxShadow: 'rgba(255,255,255,.1) 0 1px 0,rgba(0,0,0,.8) 0 1px 7px 0 inset' }} className="p-[5px] w-min h-min bg-stone-800 rounded-[5px]">
+					<Button width={ 28 } height={ 12 } link={ <button type="submit" className="w-28 h-12 bg-stone-transparent text-stone-50 rounded">Submit</button> }/>
+				</div>
+				
 				</form>
 				</div>
 		</div>

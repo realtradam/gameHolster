@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../components/Home";
 import Blogs from "../components/Blogs";
 import Games from "../components/Games";
+import Game from "../components/Game";
 import Layout from "../components/Layout";
 
 export default function index()
@@ -26,6 +27,7 @@ export default function index()
 					<Route index element={<Home />} />
 					<Route path="/blogs" element={<Blogs />} />
 					<Route path="/games" element={<Games />} />
+					<Route path="/games/:user/:game" element={<Game />} />
 				</Route>
 			</Routes>
 		</Router>
