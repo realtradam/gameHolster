@@ -3,13 +3,13 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       # isolated domain, do not allow auth here
-      constraints host: 'localhost' do
+      #constraints host: 'localhost' do
         # GAMES
         get 'game/:user/:game/*path/:file', to: 'games#play'
         get 'game/:user/:game/:file', to: 'games#play'
-      end
+      #end
 
-      constraints host: "127.0.0.1" do
+      #constraints host: "localhost" do
         # USERS
         get 'users/index', to: 'users#index'
 
@@ -21,21 +21,13 @@ Rails.application.routes.draw do
         get 'games_img/:user/:game', to: 'games#show_img'
         #resources :games
 
-        # BLOGS
-        get 'blogs/index', to: 'blog#index'
-        post 'blogs/create', to: 'blog#create'
-        get '/show/:id', to: 'blog#show'
-        delete '/destroy/:id', to: 'blog#destroy'
-
         # AUTH
         get 'auth/callback', to: 'auth#callback'
         get 'auth/data', to: 'auth#data'
-      end
+      #end
 
     end
   end
-  get '/*path' => 'homepage#index'
-  root 'homepage#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

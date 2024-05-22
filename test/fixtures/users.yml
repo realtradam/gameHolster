@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  user_name: MyString
   identifier: MyString
   access_token_digest: MyString
-  salt: MyString
-  data: 
+  user_data: 
 
 two:
+  user_name: MyString
   identifier: MyString
   access_token_digest: MyString
-  salt: MyString
-  data: 
+  user_data: 

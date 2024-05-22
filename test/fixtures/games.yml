@@ -2,12 +2,8 @@
 
 one:
   title: MyString
-  body: MyText
-  status: 1
-  user: one
+  titleSlug: MyString
 
 two:
   title: MyString
-  body: MyText
-  status: 1
-  user: two
+  titleSlug: MyString

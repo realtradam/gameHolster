@@ -1,18 +1,18 @@
-require 'irb'
-
 class Api::V1::GamesController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  #skip_before_action :verify_authenticity_token
   before_action :allow_iframe, only: [:play]
   def create
     user = User.find_by(access_token_digest: cookies[:session])
+    user = User.first
     if(!user)
-      head :unauthorized
+      render json: {}, status: 401
     else
       pp params
-      @game = Game.new(game_params)
+      
+      @game = user.games.new(game_params)#Game.new(game_params)
       @game.titleSlug = game_params[:title].parameterize
-      @game.user_id = user.id
-      user.games << @game
+      #@game.user_id = user.id
+      #user.games << @game
       if @game.save
 
         render json: @game, status: :created
@@ -26,7 +26,8 @@ class Api::V1::GamesController < ApplicationController
   # list of all games
   def index
     game = Game.all.order(created_at: :desc)
-    render json: game
+    #render json: game
+    render json: game.to_json(include: [:game_files, :card_img, :char_img, :title_img])
   end
 
   # single game or list of user's games

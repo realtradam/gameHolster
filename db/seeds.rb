@@ -7,11 +7,3 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-
-9.times do |i|
-  Blog.create!(
-    name: "Blog Post #{i + 1}",
-    content: "This is just some placeholder blog content :3",
-    category: "Test Blog",
-  )
-end

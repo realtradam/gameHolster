@@ -10,9 +10,12 @@ class Api::V1::AuthController < ApplicationController
       puts cookies[:session]
       #render json: Api::V1::AuthController.user_table[cookies[:session]]
       result = User.find_by(access_token_digest: cookies[:session])
+      puts "--- RESULT: ---"
+      puts result
       render json: result
     else
       puts "Not logged in"
+      render json: { info: "Not logged in" }, status: 401
     end
   end
   def callback
@@ -29,7 +32,13 @@ class Api::V1::AuthController < ApplicationController
     id = user_data['id'].to_s
     #puts "id: #{id}, at: #{access_token}"
     access_token_digest = BCrypt::Password.create(access_token)
-    cookies[:session] = access_token_digest
+    #cookies[:session] = access_token_digest
+    cookies[:session] = {
+      value: access_token_digest,
+      #domain: :all,
+      #same_site: :none,
+      secure:    true
+    }
     #user_params = {
     #  # access_token_digest: hashed_token,
     #  user_data: user_data
@@ -41,7 +50,7 @@ class Api::V1::AuthController < ApplicationController
     user.access_token_digest = access_token_digest
     user.user_name = user_data["login"]
     user.save
-    redirect_to '/'
+    redirect_to 'http://localhost:5173/', allow_other_host: true
   end
 
   private

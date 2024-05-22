@@ -4,11 +4,10 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.string :user_name # we need this for game urls
       t.string :identifier
       t.string :access_token_digest
-      t.string :salt
       t.json :user_data
 
       t.timestamps
     end
-    add_index :users, :identifier, unique: true
+    #add_index :users, :identifier, unique: true
   end
 end
