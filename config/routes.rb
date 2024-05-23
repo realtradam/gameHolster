@@ -1,29 +1,30 @@
 Rails.application.routes.draw do
+  #
+  # isolated domain, do not allow auth here
+  #constraints host: 'localhost' do
+  # GAMES
+  get 'game/:user/:game/*path/:file', to: 'api/v1/games#play'
+  get 'game/:user/:game/:file', to: 'api/v1/games#play'
+  #end
+
   namespace :api do
     namespace :v1 do
 
-      # isolated domain, do not allow auth here
-      #constraints host: 'localhost' do
-        # GAMES
-        get 'game/:user/:game/*path/:file', to: 'games#play'
-        get 'game/:user/:game/:file', to: 'games#play'
-      #end
-
       #constraints host: "localhost" do
-        # USERS
-        get 'users/index', to: 'users#index'
+      # USERS
+      get 'users/index', to: 'users#index'
 
-        # GAMES
-        post 'games', to: 'games#create'
-        get 'games', to: 'games#index'
-        #get 'games/:user/', to: 'games#show'
-        #get 'games/:user/:game', to: 'games#show'
-        get 'games_img/:user/:game', to: 'games#show_img'
-        #resources :games
+      # GAMES
+      post 'games', to: 'games#create'
+      get 'games', to: 'games#index'
+      #get 'games/:user/', to: 'games#show'
+      #get 'games/:user/:game', to: 'games#show'
+      get 'games_img/:user/:game', to: 'games#show_img'
+      #resources :games
 
-        # AUTH
-        get 'auth/callback', to: 'auth#callback'
-        get 'auth/data', to: 'auth#data'
+      # AUTH
+      get 'auth/callback', to: 'auth#callback'
+      get 'auth/data', to: 'auth#data'
       #end
 
     end

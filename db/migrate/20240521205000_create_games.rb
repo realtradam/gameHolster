@@ -3,7 +3,8 @@ class CreateGames < ActiveRecord::Migration[7.1]
     create_table :games do |t|
       t.string :title
       t.string :titleSlug
-      #t.text :body
+      t.string :description
+      t.string :img_rendering
       #t.integer :status, default: 0
       #t.integer :order, default: 0
 

@@ -106,7 +106,14 @@ class Api::V1::GamesController < ApplicationController
   private
 
   def game_params 
-    params.require(:game).permit(:title, :card_img, :char_img, :title_img, game_files: [])
+    params.require(:game).permit(
+      :title,
+      :description,
+      :img_rendering,
+      :card_img,
+      :char_img,
+      :title_img,
+      game_files: [])
   end
 
   def allow_iframe
