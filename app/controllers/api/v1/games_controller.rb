@@ -1,20 +1,51 @@
+require "zip"
+
+
 class Api::V1::GamesController < ApplicationController
   #skip_before_action :verify_authenticity_token
   before_action :allow_iframe, only: [:play]
   def create
     user = User.find_by(access_token_digest: cookies[:session])
-    user = User.first
+    user = User.first # temporary for debug
     if(!user)
       render json: {}, status: 401
     else
       pp params
-      
+
       @game = user.games.new(game_params)#Game.new(game_params)
       @game.titleSlug = game_params[:title].parameterize
-      #@game.user_id = user.id
-      #user.games << @game
-      if @game.save
 
+      pp params
+
+      Zip::File.open(params[:game][:zip]) do |zipfile|
+        zipfile.each do |entry|
+          if entry.file?
+            path_name = entry.name.rpartition('/')
+            name_extension = path_name.last.rpartition('.')
+            #puts "   ---   "
+            #puts "Found file: #{entry.name.rpartition('/').last} at #{entry.name.rpartition('/').first}"
+            #puts "   ---   "
+            Tempfile.open([name_extension.first, name_extension[1] + name_extension.last]) do |temp_file|
+              entry.extract(temp_file.path) { true }
+              @game.game_files.attach(io: File.open(temp_file.path), filename: path_name.last);
+              @game.game_files.last.blob.filepath = path_name.first.delete_suffix('/').delete_prefix('/')
+              @game.game_files.last.blob.save
+              @game.save
+              #@game.game_files.last.path = path_name.first
+              puts ""
+              puts ""
+              puts "  GAME FILES"
+              pp @game.game_files.size
+              pp @game.game_files.last
+              puts ""
+              puts ""
+              #activerecord_file.save
+            end
+          end
+        end
+      end
+
+      if @game.save
         render json: @game, status: :created
       else
         render json: @game.errors, status: :unprocessable_entity
@@ -67,20 +98,48 @@ class Api::V1::GamesController < ApplicationController
       filename = "#{filename}.#{params[:format]}"
     end
 
-    result = game.game_files.blobs.find_by(filename: filename)
+    puts
+    puts "HERE"
+    puts params[:path]
+    puts
+    params[:path] ||= ""
+    result = game.game_files.blobs.find_by(filename: filename, filepath: params[:path].delete_suffix('/').delete_prefix('/'))
+    #result = game.game_files.blobs.find_by(filename: filename, filepath: params[:path])
+
+    result ||= game.game_files.blobs.find_by(filename: filename)
 
     if(result.nil?)
       game = Game.all.order(created_at: :desc)
-      render json: game
+      render json: { filename: filename, filepath: params[:path] }
+      #render json: game
       return
     end
 
-    if params[:format] == "html"
+    format = filename.rpartition('.').last
+
+    if format == "html"
       render html: result.download.html_safe
-    elsif params[:format] == "js"
+    elsif format == "js"
       render js: result.download.html_safe
+    #else
+    #  redirect_to url_for(result)
+    #end
+    elsif format == "gz"
+      second_ext = filename.rpartition('.').first.rpartition('.').last
+      if second_ext == 'js'
+        response.headers['Content-Encoding'] = 'gzip'
+        send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/javascript"
+      elsif second_ext == 'wasm'
+        response.headers['Content-Encoding'] = 'gzip'
+        send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/wasm"
+      elsif second_ext == 'data'
+        response.headers['Content-Encoding'] = 'gzip'
+        send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/octet-stream"
+      else
+        send_data result.download.html_safe, filename: filename, disposition: "inline"
+      end
     else
-      render plain: result.download
+      send_data result.download.html_safe, filename: filename, disposition: "inline"
     end
 
     #render html: game.game_files.first.download.html_safe #Game.first.game_file.download.html_safe
@@ -113,7 +172,9 @@ class Api::V1::GamesController < ApplicationController
       :card_img,
       :char_img,
       :title_img,
-      game_files: [])
+      :zip
+      #game_files: []
+    )
   end
 
   def allow_iframe

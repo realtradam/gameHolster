@@ -45,3 +45,5 @@ group :development do
   # gem "spring"
 end
 
+
+gem "rubyzip", "~> 2.3"

@@ -31,6 +31,8 @@ module GamesHost
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    config.active_storage.content_types_allowed_inline << "text/html"
     
     #localhost:5173
     #config.session_store :cookie_store, key: 'session', domain: :all, tld_length: 5

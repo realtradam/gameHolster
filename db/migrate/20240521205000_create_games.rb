@@ -4,9 +4,10 @@ class CreateGames < ActiveRecord::Migration[7.1]
       t.string :title
       t.string :titleSlug
       t.string :description
+      t.string :github_link
       t.string :img_rendering
-      #t.integer :status, default: 0
-      #t.integer :order, default: 0
+      t.integer :status, default: 0
+      t.integer :order, default: 0
 
       t.timestamps
     end

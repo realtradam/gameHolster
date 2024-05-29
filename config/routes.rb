@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # isolated domain, do not allow auth here
   #constraints host: 'localhost' do
   # GAMES
-  get 'game/:user/:game/*path/:file', to: 'api/v1/games#play'
+  get 'game/:user/:game/*path/:file', to: 'api/v1/games#play', constraints: { file: /[^\/]+/ }
   get 'game/:user/:game/:file', to: 'api/v1/games#play'
   #end
 
