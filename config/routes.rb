@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
+  get 'tags/index'
+  get 'tags/create'
+  get 'tags/destroy'
   #
   # isolated domain, do not allow auth here
   #constraints host: 'localhost' do
   # GAMES
-  get 'game/:user/:game/*path/:file', to: 'api/v1/games#play', constraints: { file: /[^\/]+/ }
-  get 'game/:user/:game/:file', to: 'api/v1/games#play'
+  get 'game/:user/:game/*path/:file', to: 'api/v1/games#show_file', constraints: { file: /[^\/]+/ }
+  get 'game/:user/:game/:file', to: 'api/v1/games#show_file', constraints: { file: /[^\/]+/ }
   #end
 
   namespace :api do
@@ -17,10 +20,13 @@ Rails.application.routes.draw do
       # GAMES
       post 'games', to: 'games#create'
       get 'games', to: 'games#index'
-      #get 'games/:user/', to: 'games#show'
-      #get 'games/:user/:game', to: 'games#show'
+      get 'games/:user/', to: 'games#show'
+      get 'games/:user/:game', to: 'games#show'
       get 'games_img/:user/:game', to: 'games#show_img'
       #resources :games
+
+      # TAGS
+      get 'tags', to: 'tags#index'
 
       # AUTH
       get 'auth/callback', to: 'auth#callback'

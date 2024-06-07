@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_27_231908) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_06_200659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,11 +47,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_27_231908) do
     t.string "title"
     t.string "titleSlug"
     t.string "description"
+    t.string "github_link"
     t.string "img_rendering"
+    t.integer "status", default: 0
+    t.integer "order", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_games_on_user_id"
+  end
+
+  create_table "games_tags", id: false, force: :cascade do |t|
+    t.bigint "tag_id", null: false
+    t.bigint "game_id", null: false
+    t.index ["game_id"], name: "index_games_tags_on_game_id"
+    t.index ["tag_id"], name: "index_games_tags_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tag_type", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

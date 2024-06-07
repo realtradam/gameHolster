@@ -1,46 +1,44 @@
 require "zip"
 
-
 class Api::V1::GamesController < ApplicationController
   #skip_before_action :verify_authenticity_token
-  before_action :allow_iframe, only: [:play]
+  before_action :allow_iframe, only: [:show_file]
   def create
+    puts "----- PARAMS PLATFORM TAG ----------"
+    pp params["game"]["platform_tag"]
     user = User.find_by(access_token_digest: cookies[:session])
-    user = User.first # temporary for debug
+    #user = User.first # temporary for debug
     if(!user)
-      render json: {}, status: 401
+      render json: {session: cookies[:session]}, status: 401
     else
       pp params
 
-      @game = user.games.new(game_params)#Game.new(game_params)
+      @game = user.games.new(game_params.except(:status, :platform_tag))
       @game.titleSlug = game_params[:title].parameterize
-
-      pp params
+      @game.status = game_params[:status].to_i
+      params["game"]["platform_tag"].each do |tag|
+        tag_obj = Tag.find_by(tag_type: "platform", name: tag)
+        if tag_obj
+          @game.tags << tag_obj
+        end
+      end
 
       Zip::File.open(params[:game][:zip]) do |zipfile|
+
         zipfile.each do |entry|
           if entry.file?
             path_name = entry.name.rpartition('/')
             name_extension = path_name.last.rpartition('.')
-            #puts "   ---   "
-            #puts "Found file: #{entry.name.rpartition('/').last} at #{entry.name.rpartition('/').first}"
-            #puts "   ---   "
+
             Tempfile.open([name_extension.first, name_extension[1] + name_extension.last]) do |temp_file|
               entry.extract(temp_file.path) { true }
-              @game.game_files.attach(io: File.open(temp_file.path), filename: path_name.last);
+              @game.game_files.attach(io: File.open(temp_file.path), filename: path_name.last)
               @game.game_files.last.blob.filepath = path_name.first.delete_suffix('/').delete_prefix('/')
-              @game.game_files.last.blob.save
-              @game.save
-              #@game.game_files.last.path = path_name.first
-              puts ""
-              puts ""
-              puts "  GAME FILES"
-              pp @game.game_files.size
-              pp @game.game_files.last
-              puts ""
-              puts ""
-              #activerecord_file.save
+
+              # saving the game wont have the blob saved so we need to do it manually
+              @game.game_files.last.blob.save 
             end
+
           end
         end
       end
@@ -58,7 +56,7 @@ class Api::V1::GamesController < ApplicationController
   def index
     game = Game.all.order(created_at: :desc)
     #render json: game
-    render json: game.to_json(include: [:game_files, :card_img, :char_img, :title_img])
+    render json: game.to_json(include: [:game_files, :card_img, :char_img, :title_img, :tags])
   end
 
   # single game or list of user's games
@@ -69,17 +67,19 @@ class Api::V1::GamesController < ApplicationController
     if params[:game].nil?
       # get list of user games
       games = Game.where(user_id: user.id).order(created_at: :desc)
-      render json: games
+      render json: games.to_json(include: [:tags])
     else
       game = Game.find_by! user_id: user.id, titleSlug: params[:game]
-      render json: game
+      render json: game.to_json(include: [:tags])
       # get game
     end
   end
 
   # :user/:game/*path/:file
-  def play
+  def show_file
     user = User.find_by user_name: params[:user]
+
+    # if no user given then just show all games
     if(user.nil?)
       game = Game.all.order(created_at: :desc)
       render json: game
@@ -87,27 +87,28 @@ class Api::V1::GamesController < ApplicationController
     end
 
     game = Game.find_by user_id: user.id, titleSlug: params[:game]
+
+    # if no game given then just show all games from that user
     if(game.nil?)
       game = Game.all.order(created_at: :desc)
       render json: game
       return
     end
 
+    # format and file is seperated in rails
     filename = params[:file]
     if !params[:format].nil?
       filename = "#{filename}.#{params[:format]}"
     end
 
-    puts
-    puts "HERE"
-    puts params[:path]
-    puts
+    # if we have no path, make it a blank string
+    # this lets us later match with files that are in the root
     params[:path] ||= ""
-    result = game.game_files.blobs.find_by(filename: filename, filepath: params[:path].delete_suffix('/').delete_prefix('/'))
-    #result = game.game_files.blobs.find_by(filename: filename, filepath: params[:path])
 
-    result ||= game.game_files.blobs.find_by(filename: filename)
+    result = game.game_files.blobs.find_by(filename: filename, filepath: params[:path].delete_suffix('/').delete_prefix('/')) # TODO check if we need to do the prefix/suffix deletion at all
 
+    # we shouldnt need this
+    #result ||= game.game_files.blobs.find_by(filename: filename)
     if(result.nil?)
       game = Game.all.order(created_at: :desc)
       render json: { filename: filename, filepath: params[:path] }
@@ -116,7 +117,6 @@ class Api::V1::GamesController < ApplicationController
     end
 
     format = filename.rpartition('.').last
-
     if format == "html"
       render html: result.download.html_safe
     elsif format == "js"
@@ -125,15 +125,13 @@ class Api::V1::GamesController < ApplicationController
     #  redirect_to url_for(result)
     #end
     elsif format == "gz"
+      response.headers['Content-Encoding'] = 'gzip'
       second_ext = filename.rpartition('.').first.rpartition('.').last
       if second_ext == 'js'
-        response.headers['Content-Encoding'] = 'gzip'
         send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/javascript"
       elsif second_ext == 'wasm'
-        response.headers['Content-Encoding'] = 'gzip'
         send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/wasm"
       elsif second_ext == 'data'
-        response.headers['Content-Encoding'] = 'gzip'
         send_data result.download.html_safe, filename: filename, disposition: "inline", type: "application/octet-stream"
       else
         send_data result.download.html_safe, filename: filename, disposition: "inline"
@@ -141,11 +139,9 @@ class Api::V1::GamesController < ApplicationController
     else
       send_data result.download.html_safe, filename: filename, disposition: "inline"
     end
-
-    #render html: game.game_files.first.download.html_safe #Game.first.game_file.download.html_safe
   end
 
-  #get 'imggames/:user/:game/:file', to: 'games#show_img'
+  #get 'imggames/:user/:game?type=___', to: 'games#show_img'
   def show_img
     user = User.find_by! user_name: params[:user]
     game = Game.find_by! user_id: user.id, titleSlug: params[:game]
@@ -168,11 +164,15 @@ class Api::V1::GamesController < ApplicationController
     params.require(:game).permit(
       :title,
       :description,
+      :github_link,
       :img_rendering,
+      :status,
+      :order,
       :card_img,
       :char_img,
       :title_img,
-      :zip
+      :zip,
+      :platform_tag
       #game_files: []
     )
   end
