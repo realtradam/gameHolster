@@ -3,6 +3,6 @@ class PlatformTagsController < ApplicationController
   end
   def create
     tag = PlatformTag.create!(user_params)
-    render json: { status: "OK", message "Tag created" }, status: 201
+    render json: { status: "OK", message: "Tag created" }, status: 201
   end
 end
