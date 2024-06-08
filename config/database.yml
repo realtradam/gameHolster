@@ -82,5 +82,6 @@ test:
 production:
   <<: *default
   database: games_host_production
+  host: <%= ENV["GAMES_HOST_DATABASE_HOSTNAME"] %>
     #username: <%= ENV["GAMES_HOST_DATABASE_USERNAME"] %>
     #password: <%= ENV["GAMES_HOST_DATABASE_PASSWORD"] %>
