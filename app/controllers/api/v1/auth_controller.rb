@@ -50,7 +50,8 @@ class Api::V1::AuthController < ApplicationController
     user.access_token_digest = access_token_digest
     user.user_name = user_data["login"]
     user.save
-    redirect_to 'http://localhost:5173/', allow_other_host: true
+    #redirect_to 'http://localhost:5173/', allow_other_host: true
+    redirect_to 'https://malcz.com/', allow_other_host: true
   end
 
   private
