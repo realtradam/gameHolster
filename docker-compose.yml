@@ -1,0 +1,19 @@
+# docker-compose.yml
+services:
+  app:
+    build: .
+    stdin_open: true
+    tty: true
+    platform: linux/amd64
+    environment:
+      - RAILS_ENV=development
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/rails
+    command: ["bin/rails", "server", "-b", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
