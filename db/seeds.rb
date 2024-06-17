@@ -124,7 +124,7 @@ games = [
 ]
 
 games.each do |game|
-  next if Game.exists?(title: game[:title], user_id: 0) # first user is always me
+  next if Game.exists?(title: game[:title], user_id: 1) # first user is always me
   tags = game[:tags]
   game.delete(:tags)
   game_obj = user.games.new(game)
