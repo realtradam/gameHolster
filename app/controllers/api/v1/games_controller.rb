@@ -16,10 +16,12 @@ class Api::V1::GamesController < ApplicationController
       @game = user.games.new(game_params.except(:status, :platform_tag))
       @game.titleSlug = game_params[:title].parameterize
       @game.status = game_params[:status].to_i
-      params["game"]["platform_tag"].each do |tag|
-        tag_obj = Tag.find_by(tag_type: "platform", name: tag)
-        if tag_obj
-          @game.tags << tag_obj
+      if !params["game"]["platform_tag"].nil?
+        params["game"]["platform_tag"].each do |tag|
+          tag_obj = Tag.find_by(tag_type: "platform", name: tag)
+          if tag_obj
+            @game.tags << tag_obj
+          end
         end
       end
 
@@ -121,9 +123,9 @@ class Api::V1::GamesController < ApplicationController
       render html: result.download.html_safe
     elsif format == "js"
       render js: result.download.html_safe
-    #else
-    #  redirect_to url_for(result)
-    #end
+      #else
+      #  redirect_to url_for(result)
+      #end
     elsif format == "gz"
       response.headers['Content-Encoding'] = 'gzip'
       second_ext = filename.rpartition('.').first.rpartition('.').last
