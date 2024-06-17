@@ -25,25 +25,7 @@ class Api::V1::GamesController < ApplicationController
         end
       end
 
-      Zip::File.open(params[:game][:zip]) do |zipfile|
-
-        zipfile.each do |entry|
-          if entry.file?
-            path_name = entry.name.rpartition('/')
-            name_extension = path_name.last.rpartition('.')
-
-            Tempfile.open([name_extension.first, name_extension[1] + name_extension.last]) do |temp_file|
-              entry.extract(temp_file.path) { true }
-              @game.game_files.attach(io: File.open(temp_file.path), filename: path_name.last)
-              @game.game_files.last.blob.filepath = path_name.first.delete_suffix('/').delete_prefix('/')
-
-              # saving the game wont have the blob saved so we need to do it manually
-              @game.game_files.last.blob.save 
-            end
-
-          end
-        end
-      end
+      @game.save_zip(params[:game][:zip])
 
       if @game.save
         render json: @game, status: :created
