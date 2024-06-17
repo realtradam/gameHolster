@@ -14,7 +14,7 @@ class Api::V1::AuthController < ApplicationController
       puts result
       render json: result
     else
-      puts "Not logged in"
+      puts "Not logged in -- this should show up"
       render json: { info: "Not logged in -- change thingies" }, status: 401
     end
   end
