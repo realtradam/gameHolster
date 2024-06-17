@@ -2,6 +2,7 @@ require 'net/http'
 require 'bcrypt'
 
 class Api::V1::AuthController < ApplicationController
+  before_filter :cors_accept
   class << self
   end
 
