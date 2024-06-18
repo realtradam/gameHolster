@@ -87,8 +87,7 @@ game_tags.each do |tag|
   Tag.find_or_create_by!(name: tag, tag_type: "game")
 end
 
-User.create({ user_name: "realtradam", identifier: "11139432"})
-user = User.first
+user = User.find_or_create_by!(user_name: "realtradam", identifier: "11139432")
 
 data_dir = Rails.root.join('db/lfs')
 
