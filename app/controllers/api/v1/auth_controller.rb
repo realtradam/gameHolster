@@ -14,8 +14,8 @@ class Api::V1::AuthController < ApplicationController
       puts result
       render json: result
     else
-      puts "Not logged in -- this should show up"
-      render json: { info: "Not logged in -- change thingies" }, status: 401
+      puts "Not logged in"
+      render json: { info: "Not logged in" }, status: 401
     end
   end
   def callback
@@ -51,7 +51,7 @@ class Api::V1::AuthController < ApplicationController
     user.user_name = user_data["login"]
     user.save
     #redirect_to 'http://localhost:5173/', allow_other_host: true
-    redirect_to 'https://malcz.com/', allow_other_host: true
+    redirect_to "#{ENV['ROOT_DOMAIN']}/closewindow", allow_other_host: true
   end
 
   private

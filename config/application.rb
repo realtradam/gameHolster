@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require 'tomlib'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -33,15 +34,33 @@ module GamesHost
     config.middleware.use ActionDispatch::Session::CookieStore
 
     config.active_storage.content_types_allowed_inline << "text/html"
-    
+
     #localhost:5173
     #config.session_store :cookie_store, key: 'session', domain: :all, tld_length: 5
 
+    #config.before_configuration do
+    #  env_file = File.join(Rails.root, 'config', 'local_env.yml')
+    #  if File.exist?(env_file)
+    #    YAML.load(File.open(env_file)).each do |key, value|
+    #      ENV[key.to_s] = value
+    #    end
+    #  end
+    #end
     config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      env_file = File.join(Rails.root, 'config', 'env.toml')
       if File.exist?(env_file)
-        YAML.load(File.open(env_file)).each do |key, value|
-          ENV[key.to_s] = value
+        env = Tomlib.load(File.read(env_file))
+        env['default'].each do |key, value|
+          ENV[key] = value
+        end
+        if Rails.env.production?
+          env['production'].each do |key, value|
+            ENV[key] = value
+          end
+        elsif Rails.env.development?
+          env['development'].each do |key, value|
+            ENV[key] = value
+          end
         end
       end
     end
