@@ -69,6 +69,8 @@ HEREDOC
 
 platform_tags = [
   "web",
+  "web-desktop",
+  "web-mobile",
   "desktop",
   "mobile",
   "nintendo 64",
@@ -79,6 +81,11 @@ platform_tags.each do |tag|
 end
 
 game_tags = [
+  "unity",
+  "godot",
+  "raylib",
+  "c",
+  "ruby",
   "action",
   "tech demo",
   "idk something",
@@ -93,32 +100,53 @@ data_dir = Rails.root.join('db/lfs')
 
 games = [
   {
-    title: 'Orc: Arena of Time',
+    title: 'Almost Pong',
     description: markdown_sample,
-    github_link: 'https://github.com/realtradam/orc-arena-of-time',
-    img_rendering: 'pixelated',
-    tags: ["web", "desktop"]
+    github_link: 'https://github.com/realtradam/almost-pong',
+    img_rendering: 'crisp-edges',
+    tags: ["web-desktop"]
   },
   {
     title: 'Bubbles, Behind',
     description: markdown_sample,
     github_link: 'https://github.com/realtradam/TOJam2023',
     img_rendering: 'crisp-edges',
-    tags: ["web", "desktop"]
+    tags: ["web-desktop", "desktop"]
   },
   {
     title: 'Magnet Run',
     description: markdown_sample,
     github_link: 'https://github.com/realtradam/Magnet-Run-3D',
     img_rendering: 'crisp-edges',
-    tags: ["web", "desktop"]
+    tags: ["web-desktop", "desktop"]
   },
   {
     title: 'Optimal Direction',
     description: markdown_sample,
     github_link: 'https://github.com/realtradam/optimal-direction',
     img_rendering: 'crisp-edges',
-    tags: ["web", "desktop"]
+    tags: ["web-desktop", "desktop"]
+  },
+  {
+    title: 'Winter One',
+    description: markdown_sample,
+    github_link: '',
+    img_rendering: 'pixelated',
+    tags: ["web-desktop", "desktop"]
+  },
+  {
+    title: 'SpaceCube 64',
+    description: markdown_sample,
+    github_link: 'https://github.com/realtradam/tojam2024',
+    img_rendering: 'crisp-edges',
+    tags: ["nintendo 64", "web-desktop"]
+  },
+  {
+    title: 'Orc: Arena of Time',
+    description: markdown_sample,
+    github_link: 'https://github.com/realtradam/orc-arena-of-time',
+    img_rendering: 'pixelated',
+    tags: ["web-desktop", "desktop"]
   },
 ]
 
