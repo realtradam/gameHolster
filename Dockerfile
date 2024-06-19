@@ -1,9 +1,9 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.2
+ARG RUBY_VERSION=3.3.3
 #FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-alpine3.18 as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-alpine3.20 as base
 
 # Rails app lives here
 WORKDIR /rails
