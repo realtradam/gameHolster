@@ -101,49 +101,42 @@ data_dir = Rails.root.join('db/lfs')
 games = [
   {
     title: 'Almost Pong',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/almost-pong',
     img_rendering: 'crisp-edges',
     tags: ["web-desktop"]
   },
   {
     title: 'Bubbles, Behind',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/TOJam2023',
     img_rendering: 'crisp-edges',
     tags: ["web-desktop", "desktop"]
   },
   {
     title: 'Magnet Run',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/Magnet-Run-3D',
     img_rendering: 'crisp-edges',
     tags: ["web-desktop", "desktop"]
   },
   {
     title: 'Optimal Direction',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/optimal-direction',
     img_rendering: 'crisp-edges',
     tags: ["web-desktop", "desktop"]
   },
   {
     title: 'Winter One',
-    description: markdown_sample,
     github_link: '',
     img_rendering: 'pixelated',
     tags: ["web-desktop", "desktop"]
   },
   {
     title: 'SpaceCube 64',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/tojam2024',
     img_rendering: 'crisp-edges',
     tags: ["nintendo 64", "web-desktop"]
   },
   {
     title: 'Orc: Arena of Time',
-    description: markdown_sample,
     github_link: 'https://github.com/realtradam/orc-arena-of-time',
     img_rendering: 'pixelated',
     tags: ["web-desktop", "desktop"]
@@ -154,6 +147,7 @@ games.each do |game|
   next if Game.exists?(title: game[:title], user_id: 1) # first user is always me
   tags = game[:tags]
   game.delete(:tags)
+  game[:description] = File.read("#{data_dir}/Games/#{game[:title]}/desc.md")
   game_obj = user.games.new(game)
   game_obj.save_zip("#{data_dir}/Games/#{game[:title]}/index.zip")
   game_obj.card_img.attach(io: File.open("#{data_dir}/Games/#{game[:title]}/card.png"), filename: 'card.png')
