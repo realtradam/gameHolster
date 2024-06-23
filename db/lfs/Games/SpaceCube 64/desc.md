@@ -16,7 +16,7 @@
 
 
 
-## N64 Controls:
+### N64 Controls:
 
 - Joystick -> movement
 - Z -> shoot
