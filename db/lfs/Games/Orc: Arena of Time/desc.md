@@ -1,4 +1,4 @@
-# [Almost Pong](https://github.com/realtradam/orc-arena-of-time)
+# [Orc: Arena of Time](https://github.com/realtradam/orc-arena-of-time)
 
 ## Controls
 - WASD - Movement

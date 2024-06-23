@@ -1,4 +1,4 @@
-# [Almost Pong](https://github.com/realtradam/almost-pong)
+# [Space Cube 64](https://github.com/realtradam/tojam2024)
 
 ## Controls
 ### Web Controls:
