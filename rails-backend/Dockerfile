@@ -14,7 +14,6 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
@@ -24,13 +23,13 @@ FROM base as build
 RUN apk add --update --no-cache build-base git vips postgresql-libs postgresql-dev tzdata
 
 # Install application gems
-COPY Gemfile Gemfile.lock ./
+COPY rails-backend/Gemfile rails-backend/Gemfile.lock .
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile && echo BLAAAAHHHH
+    bundle exec bootsnap precompile --gemfile
 
 # Copy application code
-COPY . .
+COPY ./rails-backend .
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
