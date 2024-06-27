@@ -6,7 +6,7 @@ ARG RUBY_VERSION=3.3.3
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-alpine3.20 as base
 
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /rails/rails-backend
 
 # Set production environment
 ENV RAILS_ENV="production" \
