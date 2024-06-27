@@ -23,7 +23,7 @@ FROM base as build
 RUN apk add --update --no-cache build-base git vips postgresql-libs postgresql-dev tzdata
 
 # Install application gems
-COPY rails-backend/Gemfile rails-backend/Gemfile.lock .
+COPY rails-backend/Gemfile rails-backend/Gemfile.lock ./
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
