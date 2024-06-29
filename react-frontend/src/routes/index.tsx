@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
+import Games from "../pages/Games";
 import Layout from "../components/Layout";
 import CloseWindow from "../pages/CloseWindow";
 
@@ -34,6 +35,7 @@ export default function Index()
 					<Routes>
 						<Route path="/" element = {<Layout userData={userData} setUserData={setUserData}/>}>
 							<Route index element={<Home />} />
+							<Route path="/games" element={<Games />} />
 							<Route path="/closewindow" element={<CloseWindow />} />
 						</Route>
 					</Routes>

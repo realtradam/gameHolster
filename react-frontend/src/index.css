@@ -2,7 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
+/* debug class */
 * {
-	/*border: 1px solid red;*/
+	border: 1px solid red;
 }
+
+@layer components {
+	.gameCard {
+		aspect-ratio: 5/7;
+		width: 18.75em; /*300px;*/
+		perspective: 2500px;
+
+		@apply relative flex justify-center items-end;
+	}
+
+	.gameCardCoverImg {
+
+		@apply w-full h-full object-cover rounded-md;
+	}
+
+	.gameCardWrapper {
+		transition: all 0.5s;
+		z-index: -1;
+		box-shadow: -15px 15px 32px -8px rgba(0, 0, 0, 0.75);
+
+		@apply absolute w-full h-full rounded-md;
+	}
+
+	.gameCard:hover .gameCardWrapper {
+		transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+		box-shadow: -10px 35px 32px -8px rgba(0, 0, 0, 0.75);
+	}
+
+	.gameCardWrapper::before,
+	.gameCardWrapper::after {
+		content: "";
+		transition: all 0.5s;
+
+		@apply opacity-0 w-full h-20 absolute left-0 rounded-md;
+	}
+
+	.gameCardWrapper::before {
+		background-image: linear-gradient(
+			to top,
+			transparent 46%,
+			rgba(12, 13, 19, 0.5) 68%,
+			rgba(12, 13, 19) 97%
+		);
+
+		@apply top-0 h-full rounded-md;
+	}
+
+	.gameCardWrapper::after {
+		background-image: linear-gradient(
+			to bottom,
+			transparent 46%,
+			rgba(12, 13, 19, 0.5) 68%,
+			rgba(12, 13, 19) 97%
+		);
+
+		@apply bottom-0 opacity-100 rounded-md;
+	}
+
+	.gameCard:hover .gameCardWrapper::before,
+	.gameCardWrapper::after {
+		
+		@apply opacity-100;
+	}
+
+	.gameTitleImg {
+		padding: 5%;
+		transition: transform 0.5s;
+
+		@apply w-full max-h-40 object-contain;
+	}
+
+	.gameCard:hover .gameTitleImg {
+		transform: translate3d(0%, -50px, 100px);
+	}
+
+	.gameCharacterImg {
+		transition: all 0.5s;
+		z-index: -1;
+		
+		@apply w-full max-h-80 object-contain opacity-0 absolute;
+	}
+
+	.gameCard:hover .gameCharacterImg {
+		transform: translate3d(0%, -30%, 100px);
+
+		@apply opacity-100;
+	}
+}
+
 
