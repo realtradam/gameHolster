@@ -39,8 +39,7 @@ class Api::V1::GamesController < ApplicationController
   # list of all games
   def index
     game = Game.all.order(created_at: :desc)
-    #render json: game
-    render json: game.to_json(include: [:game_files, :card_img, :char_img, :title_img, :tags])
+    render json: game.to_json(include: [tags: { only: [:tag_type, :name] }, user: { only: [:user_name, :id] }], except: [:user_id])
   end
 
   # single game or list of user's games

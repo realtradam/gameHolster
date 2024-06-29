@@ -15,7 +15,7 @@ export default function Games () {
 	}, []);
 
 	const allGames = games.map((game) => (
-		<GameCard link={`/game/${game.titleSlug}`} game={game} key={game.id}/>
+		<GameCard link={`/game/${game.user.user_name}/${game.titleSlug}`} game={game} key={game.id}/>
 	));
 
 	return (

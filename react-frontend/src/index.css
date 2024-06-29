@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 /* debug class *//*
-* {
-	border: 1px solid red;
-}
-*/
+ * {
+ border: 1px solid red;
+ }
+				  */
 
 @layer components {
+
+	/* Game Card */
+
 	.gameCard {
 		aspect-ratio: 5/7;
 		width: 18.75em; /*300px;*/
@@ -45,10 +48,10 @@
 
 	.gameCardWrapper::before {
 		background-image: linear-gradient(
-			to top,
-			transparent 46%,
-			rgba(12, 13, 19, 0.5) 68%,
-			rgba(12, 13, 19) 97%
+		to top,
+		transparent 46%,
+		rgba(12, 13, 19, 0.5) 68%,
+		rgba(12, 13, 19) 97%
 		);
 
 		@apply top-0 h-full rounded-md;
@@ -56,10 +59,10 @@
 
 	.gameCardWrapper::after {
 		background-image: linear-gradient(
-			to bottom,
-			transparent 46%,
-			rgba(12, 13, 19, 0.5) 68%,
-			rgba(12, 13, 19) 97%
+		to bottom,
+		transparent 46%,
+		rgba(12, 13, 19, 0.5) 68%,
+		rgba(12, 13, 19) 97%
 		);
 
 		@apply bottom-0 opacity-100 rounded-md;
@@ -67,7 +70,7 @@
 
 	.gameCard:hover .gameCardWrapper::before,
 	.gameCardWrapper::after {
-		
+
 		@apply opacity-100;
 	}
 
@@ -85,7 +88,7 @@
 	.gameCharacterImg {
 		transition: all 0.5s;
 		z-index: -1;
-		
+
 		@apply w-full max-h-80 object-contain opacity-0 absolute;
 	}
 
@@ -93,6 +96,55 @@
 		transform: translate3d(0%, -30%, 100px);
 
 		@apply opacity-100;
+	}
+
+	/* Sidebar */
+
+	@keyframes sidebar-enter {
+		from {
+			left: -16rem;
+			@apply -left-72;
+		}
+		to {
+
+			@apply left-0;
+		}
+	}
+
+	@keyframes sidebar-exit {
+		from {
+			
+			@apply left-0;
+		}
+		to {
+
+			@apply -left-72;
+		}
+	}
+
+	@media (max-width: 768px)
+	{
+		.sidebarInit {
+
+			@apply -left-72;
+		}
+
+		.sidebarOpen {
+			animation-name: sidebar-enter;
+			
+			@apply left-0;
+		}
+
+		.sidebarClosed {
+			animation-name: sidebar-exit;
+
+			@apply -left-72;
+		}
+
+		.sidebar-animation {
+			animation-duration: 0.5s;
+			animation-iteration-count: 1;
+		}
 	}
 }
 

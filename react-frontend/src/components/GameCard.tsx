@@ -6,6 +6,7 @@ export type Tag = {
 	tag_type: string,
 	name: string,
 };
+export type BasicUser = { id: number, user_name: string };
 export type GameType = {
 	id: number,
 	title: string,
@@ -17,11 +18,11 @@ export type GameType = {
 	order: number,
 	created_at: string,
 	updated_at: string,
-	user_id: number,
 	tags: Tag[],
 	card_img: string,
 	char_img: string,
 	title_img: string,
+	user: BasicUser,
 };
 export type GameCardProps = { link: string, game: GameType };
 
