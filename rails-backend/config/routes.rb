@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       # AUTH
       get 'auth/callback', to: 'auth#callback'
       get 'auth/data', to: 'auth#data'
+      get 'auth/logout', to: 'auth#logout'
       #end
 
     end

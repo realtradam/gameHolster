@@ -4,10 +4,12 @@ import Home from "../pages/Home";
 import Layout from "../components/Layout";
 import CloseWindow from "../pages/CloseWindow";
 
+export type UserType = { name: string };
+
 export default function Index()
 {
 
-	const [userData, setUserData] = useState({ name: '' });
+	const [userData, setUserData] = useState<UserType>({ name: '' });
 	useEffect(() => {
 		const update_login_status = () => {
 			//localStorage.removeItem("logged in trigger");
@@ -30,7 +32,7 @@ export default function Index()
 	return (<>
 				<Router>
 					<Routes>
-						<Route path="/" element = {<Layout userData={userData}/>}>
+						<Route path="/" element = {<Layout userData={userData} setUserData={setUserData}/>}>
 							<Route index element={<Home />} />
 							<Route path="/closewindow" element={<CloseWindow />} />
 						</Route>

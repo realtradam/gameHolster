@@ -7,11 +7,10 @@ class Api::V1::AuthController < ApplicationController
 
   def data
     if !cookies[:session].nil?
+      puts "Logged in"
       puts cookies[:session]
       #render json: Api::V1::AuthController.user_table[cookies[:session]]
       result = User.find_by(access_token_digest: cookies[:session])
-      puts "--- RESULT: ---"
-      puts result
       render json: result
     else
       puts "Not logged in"
@@ -37,7 +36,7 @@ class Api::V1::AuthController < ApplicationController
       value: access_token_digest,
       #domain: :all,
       #same_site: :none,
-      secure:    true
+      #secure:    true
     }
     #user_params = {
     #  # access_token_digest: hashed_token,
@@ -52,6 +51,16 @@ class Api::V1::AuthController < ApplicationController
     user.save
     #redirect_to 'http://localhost:5173/', allow_other_host: true
     redirect_to "#{ENV['ROOT_DOMAIN']}/closewindow", allow_other_host: true
+  end
+  def logout
+    if !cookies[:session].nil?
+      puts cookies[:session]
+      cookies.delete :session
+    else
+      puts "cookies not found"
+    end
+    #cookies.delete :session, domain: 'localhost'
+    #redirect_to "#{ENV['ROOT_DOMAIN']}", allow_other_host: true
   end
 
   private
